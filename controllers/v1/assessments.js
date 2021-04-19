@@ -3,7 +3,7 @@ const request = require('request');
 const helperFunc = require('../../helper/chart_data');
 const pdfHandler = require('../../helper/common_handler_v2');
 const assessmentService = require('../../helper/assessment_service');
-const storePdfReportsToS3 = (!process.env.STORE_PDF_REPORTS_IN_AWS_ON_OFF || process.env.STORE_PDF_REPORTS_IN_AWS_ON_OFF != "OFF") ? "ON" : "OFF"
+const storePdfReportsInCloud = (!process.env.STORE_PDF_REPORTS_IN_CLOUD_ON_OFF || process.env.STORE_PDF_REPORTS_IN_CLOUD_ON_OFF != "OFF") ? "ON" : "OFF"
 const assessmentsHelper =  require('../../helper/assessments.js');
 
 /**
@@ -639,10 +639,9 @@ exports.pdfReports = async function (req, res) {
          
             if (assessmentRes.result == true) {
 
-               let resData = await pdfHandler.assessmentPdfGeneration(assessmentRes, storeReportsToS3=false);
+               let resData = await pdfHandler.assessmentPdfGeneration(assessmentRes, storePdfReportsInCloud, req.headers["x-auth-token"]);
 
-                resData.pdfUrl = process.env.APPLICATION_HOST_NAME + process.env.APPLICATION_BASE_URL + "v1/observations/pdfReportsUrl?id=" + resData.pdfUrl
-                res.send(resData);
+               res.send(resData);
             }
             else {
                 res.send(assessmentRes);

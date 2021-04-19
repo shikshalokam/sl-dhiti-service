@@ -10,7 +10,7 @@ const fs = require('fs');
 const path = require('path');
 const kendraService = require('../../helper/kendra_service');
 const assessmentService = require('../../helper/assessment_service');
-const storePdfReportsToS3 = (!process.env.STORE_PDF_REPORTS_IN_AWS_ON_OFF || process.env.STORE_PDF_REPORTS_IN_AWS_ON_OFF != "OFF") ? "ON" : "OFF"
+const storePdfReportsInCloud = (!process.env.STORE_PDF_REPORTS_IN_CLOUD_ON_OFF || process.env.STORE_PDF_REPORTS_IN_CLOUD_ON_OFF != "OFF") ? "ON" : "OFF"
 const filesHelper = require('../../common/files_helper');
 const observationsHelper = require('../../helper/observations');
 const pdfHandlerV2 = require('../../helper/common_handler_v2');
@@ -353,9 +353,7 @@ async function instanceObservationScorePdfFunc(req, res) {
           scoreAchieved: instaRes.scoreAchieved
         }
        
-        let resData = await pdfHandlerV2.instanceObservationScorePdfGeneration(instaRes, storeReportsToS3 = false, obj);
-         
-        resData.pdfUrl = process.env.APPLICATION_HOST_NAME + process.env.APPLICATION_BASE_URL + "v1/observations/pdfReportsUrl?id=" + resData.pdfUrl
+        let resData = await pdfHandlerV2.instanceObservationScorePdfGeneration(instaRes, storePdfReportsInCloud, obj, req.headers["x-auth-token"]);
         resolve(resData);
 
         }
@@ -1136,10 +1134,7 @@ async function entitySolutionScorePdfFunc(req, res) {
           solutionName: entityRes.solutionName
         }
 
-        let resData = await pdfHandlerV2.instanceObservationScorePdfGeneration(entityRes, storeReportsToS3 = false, obj);
-  
-        resData.pdfUrl = process.env.APPLICATION_HOST_NAME + process.env.APPLICATION_BASE_URL + "v1/observations/pdfReportsUrl?id=" + resData.pdfUrl
-  
+        let resData = await pdfHandlerV2.instanceObservationScorePdfGeneration(entityRes, storePdfReportsInCloud, obj, req.headers["x-auth-token"]);
         resolve(resData);
       }
   
@@ -1609,9 +1604,7 @@ async function observationScorePdfFunc(req, res) {
         entityType: observationRes.entityType
       }
 
-      let resData = await pdfHandlerV2.instanceObservationScorePdfGeneration(observationRes, storeReportsToS3 = false, obj);
-  
-      resData.pdfUrl = process.env.APPLICATION_HOST_NAME + process.env.APPLICATION_BASE_URL + "v1/observations/pdfReportsUrl?id=" + resData.pdfUrl
+      let resData = await pdfHandlerV2.instanceObservationScorePdfGeneration(observationRes, storePdfReportsInCloud, obj, req.headers["x-auth-token"]);
   
       res.send(resData);
     }
@@ -1982,9 +1975,12 @@ exports.pdfReportsUrl = async function (req, response) {
 
     try {
 
-    var folderPath = Buffer.from(req.query.id, 'base64').toString('ascii')
+    let folderPath = Buffer.from(req.query.id, 'base64').toString('ascii');
+
+    let files = fs.readdirSync(__dirname + '/../../' + folderPath );
+    let pdfFile = files.filter( file => file.match(new RegExp(`.*\.(${'.pdf'})`, 'ig')));
    
-    fs.readFile(__dirname + '/../../' + folderPath + '/pdfReport.pdf', function (err, data) {
+    fs.readFile(__dirname + '/../../' + folderPath + '/' + pdfFile, function (err, data) {
         if (!err) {
 
            
@@ -2367,9 +2363,8 @@ return new Promise(async function (resolve, reject) {
 
   if (("observationName" in instaRes) == true) {
 
-    let resData = await pdfHandlerV2.instanceCriteriaReportPdfGeneration(instaRes, storeReportsToS3 = false);
+    let resData = await pdfHandlerV2.instanceCriteriaReportPdfGeneration(instaRes, storePdfReportsInCloud, req.headers["x-auth-token"]);
     
-    resData.pdfUrl = process.env.APPLICATION_HOST_NAME + process.env.APPLICATION_BASE_URL + "v1/observations/pdfReportsUrl?id=" + resData.pdfUrl
     resolve(resData);
   }
   else {
@@ -2565,10 +2560,9 @@ return new Promise(async function (resolve, reject) {
       scoreAchieved: instaRes.scoreAchieved
     }
 
-    let resData = await pdfHandlerV2.instanceScoreCriteriaPdfGeneration(instaRes, storeReportsToS3 = false, obj);
+    let resData = await pdfHandlerV2.instanceScoreCriteriaPdfGeneration(instaRes, storePdfReportsInCloud, obj, req.headers["x-auth-token"]);
     
-       resData.pdfUrl = process.env.APPLICATION_HOST_NAME + process.env.APPLICATION_BASE_URL + "v1/observations/pdfReportsUrl?id=" + resData.pdfUrl
-       resolve(resData);
+    resolve(resData);
   
   }
 
@@ -2751,9 +2745,7 @@ async function entityPdfReportByCriteria(req, res) {
   
     if (("observationName" in entityRes) == true) {
      
-      let resData = await pdfHandlerV2.entityCriteriaPdfReportGeneration(entityRes, storeReportsToS3 = false);
-
-      resData.pdfUrl = process.env.APPLICATION_HOST_NAME + process.env.APPLICATION_BASE_URL + "v1/observations/pdfReportsUrl?id=" + resData.pdfUrl
+      let resData = await pdfHandlerV2.entityCriteriaPdfReportGeneration(entityRes, storePdfReportsInCloud, req.headers["x-auth-token"]);
 
       resolve(resData);
     }
@@ -2954,9 +2946,7 @@ async function entityScorePdfReportByCriteria(req, res) {
         totalObservations: entityRes.totalObservations
       }
 
-      let resData = await pdfHandlerV2.instanceScoreCriteriaPdfGeneration(entityRes, storeReportsToS3 = false, obj);
-
-      resData.pdfUrl = process.env.APPLICATION_HOST_NAME + process.env.APPLICATION_BASE_URL + "v1/observations/pdfReportsUrl?id=" + resData.pdfUrl
+      let resData = await pdfHandlerV2.instanceScoreCriteriaPdfGeneration(entityRes, storePdfReportsInCloud, obj, req.headers["x-auth-token"]);
 
       resolve(resData);
     }
@@ -3107,10 +3097,8 @@ async function observationPdfReportByCriteria(req, res) {
   
     if (("observationName" in observeRes) == true) {
      
-      let resData = await pdfHandlerV2.entityCriteriaPdfReportGeneration(observeRes, storeReportsToS3 = false);
-
-      resData.pdfUrl = process.env.APPLICATION_HOST_NAME + process.env.APPLICATION_BASE_URL + "v1/observations/pdfReportsUrl?id=" + resData.pdfUrl
-
+      let resData = await pdfHandlerV2.entityCriteriaPdfReportGeneration(observeRes, storePdfReportsInCloud, req.headers["x-auth-token"]);
+      
       resolve(resData);
     }
 
@@ -3320,10 +3308,8 @@ async function observationScorePdfReportByCriteria(req, res) {
         entityType: observationRes.entityType
     }
 
-    let resData = await pdfHandlerV2.instanceScoreCriteriaPdfGeneration(observationRes, storeReportsToS3 = false, obj);
-
-    resData.pdfUrl = process.env.APPLICATION_HOST_NAME + process.env.APPLICATION_BASE_URL + "v1/observations/pdfReportsUrl?id=" + resData.pdfUrl
-
+    let resData = await pdfHandlerV2.instanceScoreCriteriaPdfGeneration(observationRes, storePdfReportsInCloud, obj, req.headers["x-auth-token"]);
+    
     res.send(resData);
   }
 

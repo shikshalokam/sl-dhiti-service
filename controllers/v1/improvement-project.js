@@ -1,5 +1,6 @@
 const pdfHandler = require('../../helper/common_handler');
 const pdfHandlerV2 = require('../../helper/common_handler_v2');
+const storePdfReportsInCloud = (!process.env.STORE_PDF_REPORTS_IN_CLOUD_ON_OFF || process.env.STORE_PDF_REPORTS_IN_CLOUD_ON_OFF != "OFF") ? "ON" : "OFF"
 
 /**
    * @api {post} /dhiti/api/v1/improvement-project/viewProjectReport 
@@ -27,9 +28,7 @@ const pdfHandlerV2 = require('../../helper/common_handler_v2');
 //Controller function for unnati view full report pdf generation
 exports.viewProjectReport = async function(req,res){
 
-    let response = await pdfHandlerV2.unnatiViewFullReportPdfGeneration(req.body, storeReportsToS3 = false);
-  
-    response.pdfUrl = process.env.APPLICATION_HOST_NAME + process.env.APPLICATION_BASE_URL + "v1/observations/pdfReportsUrl?id=" + response.pdfUrl
+    let response = await pdfHandlerV2.unnatiViewFullReportPdfGeneration(req.body, storePdfReportsInCloud, req.headers["x-auth-token"]);
     res.send(response);
 }
 
@@ -83,9 +82,7 @@ exports.viewProjectReport = async function(req,res){
 
 exports.entityReport = async function(req,res){
 
-   let response = await pdfHandlerV2.unnatiEntityReportPdfGeneration(req.body, storeReportsToS3 = false);
- 
-   response.pdfUrl = process.env.APPLICATION_HOST_NAME + process.env.APPLICATION_BASE_URL + "v1/observations/pdfReportsUrl?id=" + response.pdfUrl
+   let response = await pdfHandlerV2.unnatiEntityReportPdfGeneration(req.body, storePdfReportsInCloud, req.headers["x-auth-token"]);
    res.send(response);
 }
 
@@ -140,13 +137,12 @@ exports.projectAndTaskReport = async function(req,res){
    let response; 
 
    if (req.query.projectPdf == "true") {
-      response = await pdfHandler.improvementProjectPdfGeneration(req.body, storeReportsToS3 = false);
+      response = await pdfHandler.improvementProjectPdfGeneration(req.body, storePdfReportsInCloud, req.headers["x-auth-token"]);
    }
    else {
      
-      response = await pdfHandler.improvementProjectTaskPdfGeneration(req.body, storeReportsToS3 = false);
+      response = await pdfHandler.improvementProjectTaskPdfGeneration(req.body, storePdfReportsInCloud, req.headers["x-auth-token"]);
    }
- 
-   response.pdfUrl = process.env.APPLICATION_HOST_NAME + process.env.APPLICATION_BASE_URL + "v1/observations/pdfReportsUrl?id=" + response.pdfUrl
+
    res.send(response);
 }
