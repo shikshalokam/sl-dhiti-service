@@ -11,7 +11,6 @@ const myBucket = process.env.AWS_BUCKET_NAME;
 const kendraHelper = require('./kendra_service');
 const request = require("request");
 const filesHelper = require('../common/files_helper');
-let pdfReportUrl = process.env.APPLICATION_HOST_NAME + process.env.APPLICATION_BASE_URL + "v1/observations/pdfReportsUrl?id=";
 
 
 // const signedUrlExpireSeconds=process.env.AWS_SIGNED_URL_EXPIRE_SECONDS;
@@ -3602,30 +3601,16 @@ exports.improvementProjectPdfGeneration = async function (responseData) {
                                             }
                                             else {
 
-                                                if (storePdfReportsInCloud == filesHelper.off) {
-                                                    let folderPath = Buffer.from(currentTempFolder).toString('base64')
-
-                                                    let response = {
-                                                        status: filesHelper.status_success,
-                                                        message: filesHelper.pdf_report_generated,
-                                                        pdfUrl: pdfReportUrl + folderPath,
-
-                                                    };
-
-                                                    return resolve(response);
-                                                }
-                                                else {
-
                                                 let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir);
-                                               
+
                                                 if (uploadFileResponse.success) {
                                                     let pdfDownloadableUrl = await getDownloadableUrl(uploadFileResponse.data);
-                                                   
+
                                                     if (pdfDownloadableUrl.success && pdfDownloadableUrl.data.result && Object.keys(pdfDownloadableUrl.data.result).length > 0) {
-                                                        
+
                                                         fs.readdir(imgPath, (err, files) => {
                                                             if (err) throw err;
-                                                            
+
                                                             let i = 0;
                                                             for (const file of files) {
 
@@ -3639,7 +3624,7 @@ exports.improvementProjectPdfGeneration = async function (responseData) {
 
                                                                     });
                                                                     console.log("path.dirname(filename).split(path.sep).pop()", path.dirname(file).split(path.sep).pop());
-                                                                   
+
                                                                 }
 
                                                                 i = i + 1;
@@ -3669,9 +3654,9 @@ exports.improvementProjectPdfGeneration = async function (responseData) {
                                                         pdfUrl: ""
                                                     })
                                                 }
+
                                             }
-                                        }
-                                    });
+                                        });
                                     }
 
                                 }).catch(err => {
@@ -3766,30 +3751,16 @@ exports.improvementProjectTaskPdfGeneration = async function (responseData) {
                                             }
                                             else {
 
-                                                if (storePdfReportsInCloud == filesHelper.off) {
-                                                    let folderPath = Buffer.from(currentTempFolder).toString('base64')
-
-                                                    let response = {
-                                                        status: filesHelper.status_success,
-                                                        message: filesHelper.pdf_report_generated,
-                                                        pdfUrl: pdfReportUrl + folderPath,
-
-                                                    };
-
-                                                    return resolve(response);
-                                                }
-                                                else {
-
                                                 let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir);
-                                               
+
                                                 if (uploadFileResponse.success) {
                                                     let pdfDownloadableUrl = await getDownloadableUrl(uploadFileResponse.data);
-                                                   
+
                                                     if (pdfDownloadableUrl.success && pdfDownloadableUrl.data.result && Object.keys(pdfDownloadableUrl.data.result).length > 0) {
-                                                        
+
                                                         fs.readdir(imgPath, (err, files) => {
                                                             if (err) throw err;
-                                                            
+
                                                             let i = 0;
                                                             for (const file of files) {
 
@@ -3803,7 +3774,7 @@ exports.improvementProjectTaskPdfGeneration = async function (responseData) {
 
                                                                     });
                                                                     console.log("path.dirname(filename).split(path.sep).pop()", path.dirname(file).split(path.sep).pop());
-                                                                   
+
                                                                 }
 
                                                                 i = i + 1;
@@ -3833,9 +3804,9 @@ exports.improvementProjectTaskPdfGeneration = async function (responseData) {
                                                         pdfUrl: ""
                                                     })
                                                 }
+
                                             }
-                                        }
-                                    });
+                                        });
                                     }
 
                                 }).catch(err => {

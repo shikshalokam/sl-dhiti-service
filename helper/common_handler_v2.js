@@ -13,7 +13,6 @@ const rimraf = require("rimraf");
 const kendraHelper = require('./kendra_service');
 const request = require("request");
 const filesHelper = require('../common/files_helper');
-let pdfReportUrl = process.env.APPLICATION_HOST_NAME + process.env.APPLICATION_BASE_URL + "v1/observations/pdfReportsUrl?id=";
 
 
 // PDF generation function for entity report
@@ -261,30 +260,16 @@ exports.pdfGeneration = async function pdfGeneration(instaRes) {
                                                             }
                                                             else {
 
-                                                                if (storePdfReportsInCloud == filesHelper.off) {
-                                                                    let folderPath = Buffer.from(currentTempFolder).toString('base64')
-
-                                                                    let response = {
-                                                                        status: filesHelper.status_success,
-                                                                        message: filesHelper.pdf_report_generated,
-                                                                        pdfUrl: pdfReportUrl + folderPath,
-
-                                                                    };
-
-                                                                    return resolve(response);
-                                                                }
-                                                                else {
-
                                                                 let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir);
-                                                               
+
                                                                 if (uploadFileResponse.success) {
                                                                     let pdfDownloadableUrl = await getDownloadableUrl(uploadFileResponse.data);
-                                                                   
+
                                                                     if (pdfDownloadableUrl.success && pdfDownloadableUrl.data.result && Object.keys(pdfDownloadableUrl.data.result).length > 0) {
-                                                                        
+
                                                                         fs.readdir(imgPath, (err, files) => {
                                                                             if (err) throw err;
-                                                                            
+
                                                                             let i = 0;
                                                                             for (const file of files) {
 
@@ -298,7 +283,7 @@ exports.pdfGeneration = async function pdfGeneration(instaRes) {
 
                                                                                     });
                                                                                     console.log("path.dirname(filename).split(path.sep).pop()", path.dirname(file).split(path.sep).pop());
-                                                                                   
+
                                                                                 }
 
                                                                                 i = i + 1;
@@ -328,17 +313,17 @@ exports.pdfGeneration = async function pdfGeneration(instaRes) {
                                                                         pdfUrl: ""
                                                                     })
                                                                 }
+
                                                             }
-                                                        }
-        
-                                                    });
-                                                      
-                                                }
-                                            })
-                                            .catch(function (err) {
-                                                resolve(err);
-                                                throw err;
-                                            });
+
+                                                        });
+
+                                                    }
+                                                })
+                                                .catch(function (err) {
+                                                    resolve(err);
+                                                    throw err;
+                                                });
                                         }
                                     });
                                 })
@@ -354,8 +339,8 @@ exports.pdfGeneration = async function pdfGeneration(instaRes) {
                 });
 
         } catch (exp) {
-
-        } finally {}
+            return reject(exp);
+        } 
     })
 
 }
@@ -546,20 +531,6 @@ exports.instanceObservationPdfGeneration = async function instanceObservationPdf
                                                             }
                                                             else {
 
-                                                                if (storePdfReportsInCloud == filesHelper.off) {
-                                                                    let folderPath = Buffer.from(currentTempFolder).toString('base64')
-
-                                                                    let response = {
-                                                                        status: filesHelper.status_success,
-                                                                        message: filesHelper.pdf_report_generated,
-                                                                        pdfUrl: pdfReportUrl + folderPath,
-
-                                                                    };
-
-                                                                    return resolve(response);
-                                                                }
-                                                                else {
-
                                                                 let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir);
                                                                
                                                                 if (uploadFileResponse.success) {
@@ -614,16 +585,14 @@ exports.instanceObservationPdfGeneration = async function instanceObservationPdf
                                                                     })
                                                                 }
                                                             }
-                                                        }
-        
-                                                    });
-                                                }
-                                            })
-                                            .catch(function (err) {
-                                                console.log("error in converting HtmlToPdf", err);
-                                                resolve(err);
-                                                throw err;
-                                            });
+                                                        });
+                                                    }
+                                                })
+                                                .catch(function (err) {
+                                                  console.log("error in converting HtmlToPdf", err);
+                                                  resolve(err);
+                                                  throw err;
+                                                });
                                         }
                                     });
                                 })
@@ -772,20 +741,6 @@ exports.instanceObservationScorePdfGeneration = async function instanceObservati
                                                             }
                                                             else {
 
-                                                                if (storePdfReportsInCloud == filesHelper.off) {
-                                                                    let folderPath = Buffer.from(currentTempFolder).toString('base64')
-
-                                                                    let response = {
-                                                                        status: filesHelper.status_success,
-                                                                        message: filesHelper.pdf_report_generated,
-                                                                        pdfUrl: pdfReportUrl + folderPath,
-
-                                                                    };
-
-                                                                    return resolve(response);
-                                                                }
-                                                                else {
-
                                                                 let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir);
                                                                
                                                                 if (uploadFileResponse.success) {
@@ -840,7 +795,7 @@ exports.instanceObservationScorePdfGeneration = async function instanceObservati
                                                                     })
                                                                 }
                                                             }
-                                                        }
+                                                        
                                                     });
                                                 }
                                             }).catch(function (err) {
@@ -973,20 +928,6 @@ exports.assessmentPdfGeneration = async function assessmentPdfGeneration(assessm
                                                             }
                                                             else {
 
-                                                                if (storePdfReportsInCloud == filesHelper.off) {
-                                                                    let folderPath = Buffer.from(currentTempFolder).toString('base64')
-
-                                                                    let response = {
-                                                                        status: filesHelper.status_success,
-                                                                        message: filesHelper.pdf_report_generated,
-                                                                        pdfUrl: pdfReportUrl + folderPath,
-
-                                                                    };
-
-                                                                    return resolve(response);
-                                                                }
-                                                                else {
-
                                                                 let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir);
                                                                
                                                                 if (uploadFileResponse.success) {
@@ -1041,7 +982,7 @@ exports.assessmentPdfGeneration = async function assessmentPdfGeneration(assessm
                                                                     })
                                                                 }
                                                             }
-                                                        }
+                                                        
                                                     });
                                                 }
                                             })
@@ -1259,20 +1200,6 @@ exports.assessmentAgainPdfReport = async function (assessmentResponse) {
                                                             }
                                                             else {
 
-                                                                if (storePdfReportsInCloud == filesHelper.off) {
-                                                                    let folderPath = Buffer.from(currentTempFolder).toString('base64')
-
-                                                                    let response = {
-                                                                        status: filesHelper.status_success,
-                                                                        message: filesHelper.pdf_report_generated,
-                                                                        pdfUrl: pdfReportUrl + folderPath,
-
-                                                                    };
-
-                                                                    return resolve(response);
-                                                                }
-                                                                else {
-
                                                                 let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir);
                                                                
                                                                 if (uploadFileResponse.success) {
@@ -1327,7 +1254,7 @@ exports.assessmentAgainPdfReport = async function (assessmentResponse) {
                                                                     })
                                                                 }
                                                             }
-                                                        }
+                                                        
                                                     });
                                                 }
                                             })
@@ -1537,20 +1464,6 @@ exports.unnatiViewFullReportPdfGeneration = async function (responseData) {
                                             }
                                             else {
 
-                                                if (storePdfReportsInCloud == filesHelper.off) {
-                                                    let folderPath = Buffer.from(currentTempFolder).toString('base64')
-
-                                                    let response = {
-                                                        status: filesHelper.status_success,
-                                                        message: filesHelper.pdf_report_generated,
-                                                        pdfUrl: pdfReportUrl + folderPath,
-
-                                                    };
-
-                                                    return resolve(response);
-                                                }
-                                                else {
-
                                                 let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir);
                                                
                                                 if (uploadFileResponse.success) {
@@ -1604,7 +1517,7 @@ exports.unnatiViewFullReportPdfGeneration = async function (responseData) {
                                                         pdfUrl: ""
                                                     })
                                                 }
-                                            }
+                                            
                                         }
                                     });
                                 }
@@ -1722,20 +1635,6 @@ exports.instanceCriteriaReportPdfGeneration = async function (instanceResponse) 
                                                             }
                                                             else {
 
-                                                                if (storePdfReportsInCloud == filesHelper.off) {
-                                                                    let folderPath = Buffer.from(currentTempFolder).toString('base64')
-
-                                                                    let response = {
-                                                                        status: filesHelper.status_success,
-                                                                        message: filesHelper.pdf_report_generated,
-                                                                        pdfUrl: pdfReportUrl + folderPath,
-
-                                                                    };
-
-                                                                    return resolve(response);
-                                                                }
-                                                                else {
-
                                                                 let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir);
                                                                
                                                                 if (uploadFileResponse.success) {
@@ -1790,7 +1689,7 @@ exports.instanceCriteriaReportPdfGeneration = async function (instanceResponse) 
                                                                     })
                                                                 }
                                                             }
-                                                        }
+                                                        
                                                     });
                                                 }
                                             })
@@ -1945,20 +1844,6 @@ exports.entityCriteriaPdfReportGeneration = async function (responseData) {
                                                             }
                                                             else {
 
-                                                                if (storePdfReportsInCloud == filesHelper.off) {
-                                                                    let folderPath = Buffer.from(currentTempFolder).toString('base64')
-
-                                                                    let response = {
-                                                                        status: filesHelper.status_success,
-                                                                        message: filesHelper.pdf_report_generated,
-                                                                        pdfUrl: pdfReportUrl + folderPath,
-
-                                                                    };
-
-                                                                    return resolve(response);
-                                                                }
-                                                                else {
-
                                                                 let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir);
                                                                
                                                                 if (uploadFileResponse.success) {
@@ -2013,7 +1898,7 @@ exports.entityCriteriaPdfReportGeneration = async function (responseData) {
                                                                     })
                                                                 }
                                                             }
-                                                        }
+                                                        
                                                     });
                                                 }
                                             })
@@ -2159,20 +2044,6 @@ exports.instanceScoreCriteriaPdfGeneration = async function (observationResp, ob
                                                             }
                                                             else {
 
-                                                                if (storePdfReportsInCloud == filesHelper.off) {
-                                                                    let folderPath = Buffer.from(currentTempFolder).toString('base64')
-
-                                                                    let response = {
-                                                                        status: filesHelper.status_success,
-                                                                        message: filesHelper.pdf_report_generated,
-                                                                        pdfUrl: pdfReportUrl + folderPath,
-
-                                                                    };
-
-                                                                    return resolve(response);
-                                                                }
-                                                                else {
-
                                                                 let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir);
                                                                
                                                                 if (uploadFileResponse.success) {
@@ -2227,7 +2098,7 @@ exports.instanceScoreCriteriaPdfGeneration = async function (observationResp, ob
                                                                     })
                                                                 }
                                                             }
-                                                        }
+                                                        
                                                     }); 
                                                 }
                                             }).catch(function (err) {
@@ -2470,20 +2341,6 @@ exports.unnatiEntityReportPdfGeneration = async function (entityReportData) {
                                             }
                                             else {
 
-                                                if (storePdfReportsInCloud == filesHelper.off) {
-                                                    let folderPath = Buffer.from(currentTempFolder).toString('base64')
-
-                                                    let response = {
-                                                        status: filesHelper.status_success,
-                                                        message: filesHelper.pdf_report_generated,
-                                                        pdfUrl: pdfReportUrl + folderPath,
-
-                                                    };
-
-                                                    return resolve(response);
-                                                }
-                                                else {
-
                                                 let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir);
                                                
                                                 if (uploadFileResponse.success) {
@@ -2538,7 +2395,7 @@ exports.unnatiEntityReportPdfGeneration = async function (entityReportData) {
                                                     })
                                                 }
                                             }
-                                        }
+                                        
                                     });
                                 }
 
