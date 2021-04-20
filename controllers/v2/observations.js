@@ -4,7 +4,6 @@ const helperFunc = require('../../helper/chart_data');
 const assessmentService = require('../../helper/assessment_service');
 const pdfHandler =  require('../../helper/common_handler_v2');
 const observationsHelper = require('../../helper/observations');
-const storePdfReportsInCloud = (!process.env.STORE_PDF_REPORTS_IN_CLOUD_ON_OFF || process.env.STORE_PDF_REPORTS_IN_CLOUD_ON_OFF != "OFF") ? "ON" : "OFF"
 
 /**
    * @api {post} /dhiti/api/v2/observations/entitySolutionReport 
@@ -178,7 +177,7 @@ async function entitySolutionReportPdfGeneration(req, res) {
 
     if (("solutionName" in entityResponse) == true) {
 
-      let pdfReport = await pdfHandler.pdfGeneration(entityResponse, storePdfReportsInCloud, req.headers["x-auth-token"]);
+      let pdfReport = await pdfHandler.pdfGeneration(entityResponse, req.headers["x-auth-token"]);
 
       resolve(pdfReport);
     }
@@ -315,7 +314,7 @@ async function entityObservationScorePdfFunc(req, res) {
         totalObservations: entityRes.totalObservations
       }
 
-      let pdfReport = await pdfHandler.instanceObservationScorePdfGeneration(entityRes, storePdfReportsInCloud, obj, req.headers["x-auth-token"]);
+      let pdfReport = await pdfHandler.instanceObservationScorePdfGeneration(entityRes, obj, req.headers["x-auth-token"]);
 
       resolve(pdfReport);
     }
@@ -461,7 +460,7 @@ async function instancePdfReport(req, res) {
 
     if (("observationName" in instaRes) == true) {
       
-      let pdfReport = await pdfHandler.instanceObservationPdfGeneration(instaRes, storePdfReportsInCloud, req.headers["x-auth-token"]);
+      let pdfReport = await pdfHandler.instanceObservationPdfGeneration(instaRes, req.headers["x-auth-token"]);
 
       resolve(pdfReport);
     
@@ -483,7 +482,7 @@ async function entityObservationPdf(req, res) {
 
     if (("observationName" in responseData) == true) {
 
-      let pdfReport = await pdfHandler.pdfGeneration(responseData, storePdfReportsInCloud, req.headers["x-auth-token"]);
+      let pdfReport = await pdfHandler.pdfGeneration(responseData, req.headers["x-auth-token"]);
 
       resolve(pdfReport);
       
@@ -504,7 +503,7 @@ async function observationGenerateReport(req, res) {
 
     if (("observationName" in responseData) == true) {
 
-      let pdfReport = await pdfHandler.pdfGeneration(responseData, storePdfReportsInCloud, req.headers["x-auth-token"]);
+      let pdfReport = await pdfHandler.pdfGeneration(responseData, req.headers["x-auth-token"]);
       
       resolve(pdfReport);
     }

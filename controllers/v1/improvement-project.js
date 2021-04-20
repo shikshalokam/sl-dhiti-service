@@ -1,6 +1,5 @@
 const pdfHandler = require('../../helper/common_handler');
 const pdfHandlerV2 = require('../../helper/common_handler_v2');
-const storePdfReportsInCloud = (!process.env.STORE_PDF_REPORTS_IN_CLOUD_ON_OFF || process.env.STORE_PDF_REPORTS_IN_CLOUD_ON_OFF != "OFF") ? "ON" : "OFF"
 
 /**
    * @api {post} /dhiti/api/v1/improvement-project/viewProjectReport 
@@ -28,7 +27,7 @@ const storePdfReportsInCloud = (!process.env.STORE_PDF_REPORTS_IN_CLOUD_ON_OFF |
 //Controller function for unnati view full report pdf generation
 exports.viewProjectReport = async function(req,res){
 
-    let response = await pdfHandlerV2.unnatiViewFullReportPdfGeneration(req.body, storePdfReportsInCloud, req.headers["x-auth-token"]);
+    let response = await pdfHandlerV2.unnatiViewFullReportPdfGeneration(req.body, req.headers["x-auth-token"]);
     res.send(response);
 }
 
@@ -82,7 +81,7 @@ exports.viewProjectReport = async function(req,res){
 
 exports.entityReport = async function(req,res){
 
-   let response = await pdfHandlerV2.unnatiEntityReportPdfGeneration(req.body, storePdfReportsInCloud, req.headers["x-auth-token"]);
+   let response = await pdfHandlerV2.unnatiEntityReportPdfGeneration(req.body, req.headers["x-auth-token"]);
    res.send(response);
 }
 
@@ -137,11 +136,11 @@ exports.projectAndTaskReport = async function(req,res){
    let response; 
 
    if (req.query.projectPdf == "true") {
-      response = await pdfHandler.improvementProjectPdfGeneration(req.body, storePdfReportsInCloud, req.headers["x-auth-token"]);
+      response = await pdfHandler.improvementProjectPdfGeneration(req.body, req.headers["x-auth-token"]);
    }
    else {
      
-      response = await pdfHandler.improvementProjectTaskPdfGeneration(req.body, storePdfReportsInCloud, req.headers["x-auth-token"]);
+      response = await pdfHandler.improvementProjectTaskPdfGeneration(req.body, req.headers["x-auth-token"]);
    }
 
    res.send(response);

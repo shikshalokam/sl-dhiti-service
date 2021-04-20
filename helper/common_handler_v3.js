@@ -17,7 +17,7 @@ let pdfReportUrl = process.env.APPLICATION_HOST_NAME + process.env.APPLICATION_B
 
 
 // PDF generation function for entity report
-exports.pdfGeneration = async function pdfGeneration(instaRes, storePdfReportsInCloud, token) {
+exports.pdfGeneration = async function pdfGeneration(instaRes, token) {
 
 
     return new Promise(async function (resolve, reject) {
@@ -359,7 +359,7 @@ exports.pdfGeneration = async function pdfGeneration(instaRes, storePdfReportsIn
 }
 
 // PDF generation function for instance API
-exports.instanceObservationPdfGeneration = async function instanceObservationPdfGeneration(instaRes, storePdfReportsInCloud, token) {
+exports.instanceObservationPdfGeneration = async function instanceObservationPdfGeneration(instaRes, token) {
 
 
     return new Promise(async function (resolve, reject) {
@@ -642,7 +642,7 @@ exports.instanceObservationPdfGeneration = async function instanceObservationPdf
 }
 
 //PDF generation for instance observation score report
-exports.instanceObservationScorePdfGeneration = async function instanceObservationPdfGeneration(observationResp, storePdfReportsInCloud, obj, token) {
+exports.instanceObservationScorePdfGeneration = async function instanceObservationPdfGeneration(observationResp, obj, token) {
 
     return new Promise(async function (resolve, reject) {
 
@@ -866,7 +866,7 @@ exports.instanceObservationScorePdfGeneration = async function instanceObservati
 // ============> PDF generation function for assessment API ======================>
 
 // Single submission and multiple submission assessment report
-exports.assessmentAgainPdfReport = async function (assessmentResponse, storePdfReportsInCloud, token) {
+exports.assessmentAgainPdfReport = async function (assessmentResponse, token) {
 
     return new Promise(async function (resolve, reject) {
 
@@ -1175,7 +1175,7 @@ const convertAssessAgainChartDataToPercentage = async function(domainObj) {
 }
 
 //PDF generation for instance criteria report
-exports.instanceCriteriaReportPdfGeneration = async function (instanceResponse, storePdfReportsInCloud, token) {
+exports.instanceCriteriaReportPdfGeneration = async function (instanceResponse, token) {
 
 
     return new Promise(async function (resolve, reject) {
@@ -1373,7 +1373,7 @@ exports.instanceCriteriaReportPdfGeneration = async function (instanceResponse, 
 
 
 // PDF generation function for entity report
-exports.entityCriteriaPdfReportGeneration = async function (responseData, storePdfReportsInCloud, token) {
+exports.entityCriteriaPdfReportGeneration = async function (responseData, token) {
 
     return new Promise(async function (resolve, reject) {
 
@@ -1598,7 +1598,7 @@ exports.entityCriteriaPdfReportGeneration = async function (responseData, storeP
 }
 
 //PDF generation for instance observation score report
-exports.instanceScoreCriteriaPdfGeneration = async function (observationResp, storePdfReportsInCloud, obj, token) {
+exports.instanceScoreCriteriaPdfGeneration = async function (observationResp, obj, token) {
 
     return new Promise(async function (resolve, reject) {
 

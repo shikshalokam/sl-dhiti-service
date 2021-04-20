@@ -3528,7 +3528,7 @@ async function getPercentages(data, target = 100) {
 
 
 //Improvement project pdf generation function
-exports.improvementProjectPdfGeneration = async function (responseData, storePdfReportsInCloud, token) {
+exports.improvementProjectPdfGeneration = async function (responseData, token) {
 
     return new Promise(async function (resolve, reject) {
 
@@ -3689,7 +3689,7 @@ exports.improvementProjectPdfGeneration = async function (responseData, storePdf
 }
 
 //Improvement project task pdf generation function
-exports.improvementProjectTaskPdfGeneration = async function (responseData, storePdfReportsInCloud, token) {
+exports.improvementProjectTaskPdfGeneration = async function (responseData, token) {
 
     return new Promise(async function (resolve, reject) {
        
