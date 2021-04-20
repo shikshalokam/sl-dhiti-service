@@ -5,7 +5,6 @@ const assessmentService = require('../../helper/assessment_service');
 const pdfHandler =  require('../../helper/common_handler_v2');
 const observationsHelper = require('../../helper/observations');
 
-
 /**
    * @api {post} /dhiti/api/v2/observations/entitySolutionReport 
    * entity solution report
@@ -178,18 +177,9 @@ async function entitySolutionReportPdfGeneration(req, res) {
 
     if (("solutionName" in entityResponse) == true) {
 
-      let obj = {
-        solutionName: entityResponse.solutionName
-      }
+      let pdfReport = await pdfHandler.pdfGeneration(entityResponse);
 
-      let resData = await pdfHandler.pdfGeneration(entityResponse, storeReportsToS3 = false, obj);
-
-      var responseObject = {
-        "status": "success",
-        "message": "report generated",
-        pdfUrl: process.env.APPLICATION_HOST_NAME + process.env.APPLICATION_BASE_URL + "v1/observations/pdfReportsUrl?id=" + resData.pdfUrl
-      }
-      resolve(responseObject);
+      resolve(pdfReport);
     }
 
     else {
@@ -324,11 +314,9 @@ async function entityObservationScorePdfFunc(req, res) {
         totalObservations: entityRes.totalObservations
       }
 
-      let resData = await pdfHandler.instanceObservationScorePdfGeneration(entityRes, storeReportsToS3 = false, obj);
+      let pdfReport = await pdfHandler.instanceObservationScorePdfGeneration(entityRes, obj);
 
-      resData.pdfUrl = process.env.APPLICATION_HOST_NAME + process.env.APPLICATION_BASE_URL + "v1/observations/pdfReportsUrl?id=" + resData.pdfUrl
-
-      resolve(resData);
+      resolve(pdfReport);
     }
 
     else {
@@ -472,21 +460,9 @@ async function instancePdfReport(req, res) {
 
     if (("observationName" in instaRes) == true) {
       
-      let resData = await pdfHandler.instanceObservationPdfGeneration(instaRes, storeReportsToS3 = false);
+      let pdfReport = await pdfHandler.instanceObservationPdfGeneration(instaRes);
 
-      if (resData.status && resData.status == "success") {
-
-        let response = {
-          status: "success",
-          message: 'Instance observation Pdf Generated successfully',
-          pdfUrl: process.env.APPLICATION_HOST_NAME + process.env.APPLICATION_BASE_URL + "v1/observations/pdfReportsUrl?id=" + resData.pdfUrl
-        }
-
-        resolve(response);
-
-      } else {
-        resolve(resData);
-      }
+      resolve(pdfReport);
     
     }
     else {
@@ -506,21 +482,10 @@ async function entityObservationPdf(req, res) {
 
     if (("observationName" in responseData) == true) {
 
-      let resData = await pdfHandler.pdfGeneration(responseData, storeReportsToS3 = false);
+      let pdfReport = await pdfHandler.pdfGeneration(responseData);
 
-      if (resData.status && resData.status == "success") {
-
-        let obj = {
-          status: "success",
-          message: 'Observation Pdf Generated successfully',
-          pdfUrl: process.env.APPLICATION_HOST_NAME + process.env.APPLICATION_BASE_URL + "v1/observations/pdfReportsUrl?id=" + resData.pdfUrl
-        }
-
-        resolve(obj);
-
-      } else {
-        resolve(resData);
-      }
+      resolve(pdfReport);
+      
     }
     else {
       resolve(responseData);
@@ -538,20 +503,9 @@ async function observationGenerateReport(req, res) {
 
     if (("observationName" in responseData) == true) {
 
-      let resData = await pdfHandler.pdfGeneration(responseData, storeReportsToS3 = false);
-
-      if (resData.status && resData.status == "success") {
-
-        let obj = {
-          status: "success",
-          message: 'Observation Pdf Generated successfully',
-          pdfUrl: process.env.APPLICATION_HOST_NAME + process.env.APPLICATION_BASE_URL + "v1/observations/pdfReportsUrl?id=" + resData.pdfUrl
-        }
-
-        resolve(obj);
-      } else {
-        resolve(resData);
-      }
+      let pdfReport = await pdfHandler.pdfGeneration(responseData);
+      
+      resolve(pdfReport);
     }
     else {
       resolve(responseData);
