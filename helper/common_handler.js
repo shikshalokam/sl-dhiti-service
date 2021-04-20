@@ -3528,7 +3528,7 @@ async function getPercentages(data, target = 100) {
 
 
 //Improvement project pdf generation function
-exports.improvementProjectPdfGeneration = async function (responseData, token) {
+exports.improvementProjectPdfGeneration = async function (responseData) {
 
     return new Promise(async function (resolve, reject) {
 
@@ -3616,7 +3616,7 @@ exports.improvementProjectPdfGeneration = async function (responseData, token) {
                                                 }
                                                 else {
 
-                                                let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir, token);
+                                                let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir);
                                                
                                                 if (uploadFileResponse.success) {
                                                     let pdfDownloadableUrl = await getDownloadableUrl(uploadFileResponse.data);
@@ -3689,7 +3689,7 @@ exports.improvementProjectPdfGeneration = async function (responseData, token) {
 }
 
 //Improvement project task pdf generation function
-exports.improvementProjectTaskPdfGeneration = async function (responseData, token) {
+exports.improvementProjectTaskPdfGeneration = async function (responseData) {
 
     return new Promise(async function (resolve, reject) {
        
@@ -3780,7 +3780,7 @@ exports.improvementProjectTaskPdfGeneration = async function (responseData, toke
                                                 }
                                                 else {
 
-                                                let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir, token);
+                                                let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir);
                                                
                                                 if (uploadFileResponse.success) {
                                                     let pdfDownloadableUrl = await getDownloadableUrl(uploadFileResponse.data);
@@ -3853,7 +3853,7 @@ exports.improvementProjectTaskPdfGeneration = async function (responseData, toke
 }
 
 
-const uploadPdfToCloud = async function(fileName, folderPath, token) {
+const uploadPdfToCloud = async function(fileName, folderPath) {
 
     return new Promise( async function( resolve, reject) {
      
@@ -3861,8 +3861,7 @@ const uploadPdfToCloud = async function(fileName, folderPath, token) {
  
          let getSignedUrl = await kendraHelper.getPreSignedUrl
          (
-             fileName,
-             token
+             fileName
          );
         
          if (getSignedUrl.result && Object.keys(getSignedUrl.result).length > 0) {

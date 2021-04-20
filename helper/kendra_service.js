@@ -43,7 +43,7 @@ async function getDownloadableUrl(filePaths, token) {
 }
 
 
-async function getPreSignedUrl(file, token) {
+async function getPreSignedUrl(file) {
   return new Promise(async function (resolve, reject) {
 
     let url = urlPrefix + endpoints.GET_PRESIGNED_URL;
@@ -61,7 +61,6 @@ async function getPreSignedUrl(file, token) {
       method: "POST",
       json: true,
       headers: {
-        "x-authenticated-user-token": token,
         "internal-access-token": process.env.INTERNAL_ACCESS_TOKEN,
         "Content-Type": "application/json",
       },

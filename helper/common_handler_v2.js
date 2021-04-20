@@ -17,7 +17,7 @@ let pdfReportUrl = process.env.APPLICATION_HOST_NAME + process.env.APPLICATION_B
 
 
 // PDF generation function for entity report
-exports.pdfGeneration = async function pdfGeneration(instaRes, token) {
+exports.pdfGeneration = async function pdfGeneration(instaRes) {
 
 
     return new Promise(async function (resolve, reject) {
@@ -275,7 +275,7 @@ exports.pdfGeneration = async function pdfGeneration(instaRes, token) {
                                                                 }
                                                                 else {
 
-                                                                let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir, token);
+                                                                let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir);
                                                                
                                                                 if (uploadFileResponse.success) {
                                                                     let pdfDownloadableUrl = await getDownloadableUrl(uploadFileResponse.data);
@@ -361,7 +361,7 @@ exports.pdfGeneration = async function pdfGeneration(instaRes, token) {
 }
 
 // PDF generation function for instance API
-exports.instanceObservationPdfGeneration = async function instanceObservationPdfGeneration(instaRes, token) {
+exports.instanceObservationPdfGeneration = async function instanceObservationPdfGeneration(instaRes) {
 
 
     return new Promise(async function (resolve, reject) {
@@ -560,7 +560,7 @@ exports.instanceObservationPdfGeneration = async function instanceObservationPdf
                                                                 }
                                                                 else {
 
-                                                                let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir, token);
+                                                                let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir);
                                                                
                                                                 if (uploadFileResponse.success) {
                                                                     let pdfDownloadableUrl = await getDownloadableUrl(uploadFileResponse.data);
@@ -643,7 +643,7 @@ exports.instanceObservationPdfGeneration = async function instanceObservationPdf
 }
 
 //PDF generation for instance observation score report
-exports.instanceObservationScorePdfGeneration = async function instanceObservationPdfGeneration(observationResp, obj, token) {
+exports.instanceObservationScorePdfGeneration = async function instanceObservationPdfGeneration(observationResp, obj) {
 
     return new Promise(async function (resolve, reject) {
 
@@ -786,7 +786,7 @@ exports.instanceObservationScorePdfGeneration = async function instanceObservati
                                                                 }
                                                                 else {
 
-                                                                let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir, token);
+                                                                let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir);
                                                                
                                                                 if (uploadFileResponse.success) {
                                                                     let pdfDownloadableUrl = await getDownloadableUrl(uploadFileResponse.data);
@@ -867,7 +867,7 @@ exports.instanceObservationScorePdfGeneration = async function instanceObservati
 
 
 // ============> PDF generation function for assessment API ======================>
-exports.assessmentPdfGeneration = async function assessmentPdfGeneration(assessmentRes, token) {
+exports.assessmentPdfGeneration = async function assessmentPdfGeneration(assessmentRes) {
 
 
     return new Promise(async function (resolve, reject) {
@@ -987,7 +987,7 @@ exports.assessmentPdfGeneration = async function assessmentPdfGeneration(assessm
                                                                 }
                                                                 else {
 
-                                                                let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir, token);
+                                                                let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir);
                                                                
                                                                 if (uploadFileResponse.success) {
                                                                     let pdfDownloadableUrl = await getDownloadableUrl(uploadFileResponse.data);
@@ -1151,7 +1151,7 @@ const convertChartDataToPercentage = async function (domainObj) {
 }
 
 // Single submission and multiple submission assessment report
-exports.assessmentAgainPdfReport = async function (assessmentResponse, token) {
+exports.assessmentAgainPdfReport = async function (assessmentResponse) {
 
     return new Promise(async function (resolve, reject) {
 
@@ -1273,7 +1273,7 @@ exports.assessmentAgainPdfReport = async function (assessmentResponse, token) {
                                                                 }
                                                                 else {
 
-                                                                let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir, token);
+                                                                let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir);
                                                                
                                                                 if (uploadFileResponse.success) {
                                                                     let pdfDownloadableUrl = await getDownloadableUrl(uploadFileResponse.data);
@@ -1461,7 +1461,7 @@ const convertAssessAgainChartDataToPercentage = async function(domainObj) {
 
 
 //Unnati monthly report pdf generation function
-exports.unnatiViewFullReportPdfGeneration = async function (responseData, token) {
+exports.unnatiViewFullReportPdfGeneration = async function (responseData) {
 
     return new Promise(async function (resolve, reject) {
 
@@ -1551,7 +1551,7 @@ exports.unnatiViewFullReportPdfGeneration = async function (responseData, token)
                                                 }
                                                 else {
 
-                                                let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir, token);
+                                                let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir);
                                                
                                                 if (uploadFileResponse.success) {
                                                     let pdfDownloadableUrl = await getDownloadableUrl(uploadFileResponse.data);
@@ -1623,7 +1623,7 @@ exports.unnatiViewFullReportPdfGeneration = async function (responseData, token)
 
 
 //PDF generation for instance criteria report
-exports.instanceCriteriaReportPdfGeneration = async function (instanceResponse, token) {
+exports.instanceCriteriaReportPdfGeneration = async function (instanceResponse) {
 
 
     return new Promise(async function (resolve, reject) {
@@ -1736,7 +1736,7 @@ exports.instanceCriteriaReportPdfGeneration = async function (instanceResponse, 
                                                                 }
                                                                 else {
 
-                                                                let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir, token);
+                                                                let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir);
                                                                
                                                                 if (uploadFileResponse.success) {
                                                                     let pdfDownloadableUrl = await getDownloadableUrl(uploadFileResponse.data);
@@ -1818,7 +1818,7 @@ exports.instanceCriteriaReportPdfGeneration = async function (instanceResponse, 
 
 
 // PDF generation function for entity report
-exports.entityCriteriaPdfReportGeneration = async function (responseData, token) {
+exports.entityCriteriaPdfReportGeneration = async function (responseData) {
 
     return new Promise(async function (resolve, reject) {
 
@@ -1959,7 +1959,7 @@ exports.entityCriteriaPdfReportGeneration = async function (responseData, token)
                                                                 }
                                                                 else {
 
-                                                                let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir, token);
+                                                                let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir);
                                                                
                                                                 if (uploadFileResponse.success) {
                                                                     let pdfDownloadableUrl = await getDownloadableUrl(uploadFileResponse.data);
@@ -2043,7 +2043,7 @@ exports.entityCriteriaPdfReportGeneration = async function (responseData, token)
 }
 
 //PDF generation for instance observation score report
-exports.instanceScoreCriteriaPdfGeneration = async function (observationResp, obj, token) {
+exports.instanceScoreCriteriaPdfGeneration = async function (observationResp, obj) {
 
     return new Promise(async function (resolve, reject) {
 
@@ -2173,7 +2173,7 @@ exports.instanceScoreCriteriaPdfGeneration = async function (observationResp, ob
                                                                 }
                                                                 else {
 
-                                                                let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir, token);
+                                                                let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir);
                                                                
                                                                 if (uploadFileResponse.success) {
                                                                     let pdfDownloadableUrl = await getDownloadableUrl(uploadFileResponse.data);
@@ -2383,7 +2383,7 @@ function dateDiffInDays(a, b) {
 }
 
 //Unnati redesign entity report pdf generation function
-exports.unnatiEntityReportPdfGeneration = async function (entityReportData, token) {
+exports.unnatiEntityReportPdfGeneration = async function (entityReportData) {
 
     return new Promise(async function (resolve, reject) {
 
@@ -2484,7 +2484,7 @@ exports.unnatiEntityReportPdfGeneration = async function (entityReportData, toke
                                                 }
                                                 else {
 
-                                                let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir, token);
+                                                let uploadFileResponse = await uploadPdfToCloud(pdfFile, dir);
                                                
                                                 if (uploadFileResponse.success) {
                                                     let pdfDownloadableUrl = await getDownloadableUrl(uploadFileResponse.data);
@@ -2818,7 +2818,7 @@ const createChart = async function (chartData, imgPath) {
     })
 }
 
-const uploadPdfToCloud = async function(fileName, folderPath, token) {
+const uploadPdfToCloud = async function(fileName, folderPath) {
 
     return new Promise( async function( resolve, reject) {
      
@@ -2826,8 +2826,7 @@ const uploadPdfToCloud = async function(fileName, folderPath, token) {
  
          let getSignedUrl = await kendraHelper.getPreSignedUrl
          (
-             fileName,
-             token
+             fileName
          );
         
          if (getSignedUrl.result && Object.keys(getSignedUrl.result).length > 0) {

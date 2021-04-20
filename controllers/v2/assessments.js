@@ -126,7 +126,7 @@ exports.pdfReports = async function (req, res) {
 
             if (assessmentRes.result == true) {
 
-                let response = await pdfHandler.assessmentAgainPdfReport(assessmentRes, req.headers["x-auth-token"]);
+                let response = await pdfHandler.assessmentAgainPdfReport(assessmentRes);
 
                 res.send(response);
             }
@@ -138,7 +138,7 @@ exports.pdfReports = async function (req, res) {
 
             if (assessmentRes.result == true) {
 
-                let response = await pdfHandler.assessmentPdfGeneration(assessmentRes, req.headers["x-auth-token"]);
+                let response = await pdfHandler.assessmentPdfGeneration(assessmentRes);
 
                 res.send(response);
             }

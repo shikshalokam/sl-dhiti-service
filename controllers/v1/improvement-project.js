@@ -27,7 +27,7 @@ const pdfHandlerV2 = require('../../helper/common_handler_v2');
 //Controller function for unnati view full report pdf generation
 exports.viewProjectReport = async function(req,res){
 
-    let response = await pdfHandlerV2.unnatiViewFullReportPdfGeneration(req.body, req.headers["x-auth-token"]);
+    let response = await pdfHandlerV2.unnatiViewFullReportPdfGeneration(req.body);
     res.send(response);
 }
 
@@ -81,7 +81,7 @@ exports.viewProjectReport = async function(req,res){
 
 exports.entityReport = async function(req,res){
 
-   let response = await pdfHandlerV2.unnatiEntityReportPdfGeneration(req.body, req.headers["x-auth-token"]);
+   let response = await pdfHandlerV2.unnatiEntityReportPdfGeneration(req.body);
    res.send(response);
 }
 
@@ -136,11 +136,11 @@ exports.projectAndTaskReport = async function(req,res){
    let response; 
 
    if (req.query.projectPdf == "true") {
-      response = await pdfHandler.improvementProjectPdfGeneration(req.body, req.headers["x-auth-token"]);
+      response = await pdfHandler.improvementProjectPdfGeneration(req.body);
    }
    else {
      
-      response = await pdfHandler.improvementProjectTaskPdfGeneration(req.body, req.headers["x-auth-token"]);
+      response = await pdfHandler.improvementProjectTaskPdfGeneration(req.body);
    }
 
    res.send(response);

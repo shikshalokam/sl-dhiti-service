@@ -177,7 +177,7 @@ async function entitySolutionReportPdfGeneration(req, res) {
 
     if (("solutionName" in entityResponse) == true) {
 
-      let pdfReport = await pdfHandler.pdfGeneration(entityResponse, req.headers["x-auth-token"]);
+      let pdfReport = await pdfHandler.pdfGeneration(entityResponse);
 
       resolve(pdfReport);
     }
@@ -314,7 +314,7 @@ async function entityObservationScorePdfFunc(req, res) {
         totalObservations: entityRes.totalObservations
       }
 
-      let pdfReport = await pdfHandler.instanceObservationScorePdfGeneration(entityRes, obj, req.headers["x-auth-token"]);
+      let pdfReport = await pdfHandler.instanceObservationScorePdfGeneration(entityRes, obj);
 
       resolve(pdfReport);
     }
@@ -460,7 +460,7 @@ async function instancePdfReport(req, res) {
 
     if (("observationName" in instaRes) == true) {
       
-      let pdfReport = await pdfHandler.instanceObservationPdfGeneration(instaRes, req.headers["x-auth-token"]);
+      let pdfReport = await pdfHandler.instanceObservationPdfGeneration(instaRes);
 
       resolve(pdfReport);
     
@@ -482,7 +482,7 @@ async function entityObservationPdf(req, res) {
 
     if (("observationName" in responseData) == true) {
 
-      let pdfReport = await pdfHandler.pdfGeneration(responseData, req.headers["x-auth-token"]);
+      let pdfReport = await pdfHandler.pdfGeneration(responseData);
 
       resolve(pdfReport);
       
@@ -503,7 +503,7 @@ async function observationGenerateReport(req, res) {
 
     if (("observationName" in responseData) == true) {
 
-      let pdfReport = await pdfHandler.pdfGeneration(responseData, req.headers["x-auth-token"]);
+      let pdfReport = await pdfHandler.pdfGeneration(responseData);
       
       resolve(pdfReport);
     }
