@@ -558,15 +558,13 @@ async function radioObjectCreateFunc(data, noOfSubmissions) {
                     data: chartdata
                 }]
             },
-            options: {
-                legend: {
-                    position: 'top',
-                    display: true,
-                    labels: {
-                        padding: 25
-                    },
+            options :{
+                responsive: true,
+                legend: { 
+                    position: "bottom", 
+                     align: "start"
                 }
-            }
+            },
         },
         instanceQuestions: [],
         criteriaName: data[0].event.criteriaName,
