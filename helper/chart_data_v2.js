@@ -2268,6 +2268,10 @@ const entityLevelReportChartCreateFunc = async function (groupedSubmissionData, 
 
                     scoresExists = true;
 
+                    if (domainData.event.level == filesHelper.no_level_matched) {
+                        domainData.event.label = filesHelper.NA;
+                    }
+
                     if (!dynamicLevelObj[domainData.event.level]) {
                         dynamicLevelObj[domainData.event.level] = [];
                     }
