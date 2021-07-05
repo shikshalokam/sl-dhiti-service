@@ -38,6 +38,10 @@ exports.instanceReportChart = async function (data, reportType = "") {
             }
         }
 
+        if (data[0].event.completedDate) {
+            response["completedDate"] = data[0].event.completedDate;
+        }
+
 
         await Promise.all(data.map(async element => {
 
@@ -250,6 +254,10 @@ exports.entityReportChart = async function (data, entityId, entityType, reportTy
                 programName: data[0].event.programName,
                 reportSections: []
             }
+        }
+
+        if (data[0].event.completedDate) {
+            response["completedDate"] = data[0].event.completedDate;
         }
 
         await Promise.all(data.map(element => {
