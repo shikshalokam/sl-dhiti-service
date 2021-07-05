@@ -261,6 +261,11 @@ exports.entityReportChart = async function (data, entityId, entityType, reportTy
         }
 
         await Promise.all(data.map(element => {
+            console.log("------- start logs ----------");
+            console.log("--- element is ----",element);
+            console.log("---- completed date is ----",element.event.completedDate)
+            console.log("-------- end logs ------------");
+            
             if (!noOfSubmissions.includes(element.event[solutionType + "SubmissionId"])) {
                 noOfSubmissions.push(element.event[solutionType + "SubmissionId"]);
                 submissions.push({
