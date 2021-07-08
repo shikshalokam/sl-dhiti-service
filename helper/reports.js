@@ -406,6 +406,7 @@ exports.entityObservationReport = async function (req, res) {
             if (req.body.scores == false && req.body.criteriaWise == false) {
 
                 chartData = await helperFunc.entityReportChart(data, req.body.entityId, req.body.entityType);
+                console.log("---- chart data is ----",chartData)
 
                 if (evidenceData.result) {
                     response = await helperFunc.evidenceChartObjectCreation(chartData, evidenceData.data, req.headers["x-auth-token"]);
