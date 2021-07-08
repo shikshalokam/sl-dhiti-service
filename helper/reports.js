@@ -79,6 +79,10 @@ exports.instaceObservationReport = async function (req, res) {
             bodyParam.dimensions.push("observationSubmissionId", "completedDate", "domainName", "criteriaDescription", "level", "label", "childExternalid", "childName", "childType", "solutionId");
         }
 
+        if (!bodyParam.dimensions.includes('completedDate')) {
+            bodyParam.dimensions.push('completedDate');
+        }
+
         //pass the query get the result from druid
         let options = gen.utils.getDruidConnection();
         options.method = "POST";
@@ -341,6 +345,10 @@ exports.entityObservationReport = async function (req, res) {
             bodyParam.filter.fields.push({"type":"selector","dimension":"childType","value":"criteria"});
             bodyParam.filter.fields.push({"type":"selector","dimension":"createdBy","value": req.userDetails.userId});
             bodyParam.dimensions.push("observationSubmissionId", "completedDate", "domainName", "criteriaDescription", "level", "label", "childExternalid", "childName", "childType", "solutionId");
+        }
+
+        if (!bodyParam.dimensions.includes('completedDate')) {
+            bodyParam.dimensions.push('completedDate');
         }
 
         //pass the query get the result from druid
