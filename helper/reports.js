@@ -215,10 +215,19 @@ exports.instaceObservationReport = async function (req, res) {
                     "result": true,
                     "programName": data[0].event.programName,
                     "solutionName": data[0].event.solutionName,
-                    "solutionId": data[0].event.solutionId
+                    "solutionId": data[0].event.solutionId,
+                    "completedDate": data[0].event.completedDate
                 };
 
                 chartData = await helperFunc.entityLevelReportData(data);
+
+                for (const element of data) {
+                    if (response.completedDate) {
+                        if (new Date(element.event.completedDate) > new Date(response.completedDate)) {
+                            response.completedDate = element.event.completedDate;
+                        }
+                    }
+                }
 
                 response.reportSections = chartData.result;
 
@@ -492,10 +501,19 @@ exports.entityObservationReport = async function (req, res) {
                     "result": true,
                     "programName": data[0].event.programName,
                     "solutionName": data[0].event.solutionName,
-                    "solutionId": data[0].event.solutionId
+                    "solutionId": data[0].event.solutionId,
+                    "completedDate": data[0].event.completedDate
                 };
 
                 chartData = await helperFunc.entityLevelReportData(data);
+
+                for (const element of data) {
+                    if (response.completedDate) {
+                        if (new Date(element.event.completedDate) > new Date(response.completedDate)) {
+                            response.completedDate = element.event.completedDate;
+                        }
+                    }
+                }
 
                 response.reportSections = chartData.result; 
                 response.filters = chartData.filters;
