@@ -211,6 +211,9 @@ exports.instaceObservationReport = async function (req, res) {
             }
 
             if (req.body.scores == true && criteriaLevelReport == true) {
+                
+                console.log("entity name is ",data[0].event[req.body.entityType + "Name"]);
+
                 let response = {
                     "result": true,
                     "programName": data[0].event.programName,
