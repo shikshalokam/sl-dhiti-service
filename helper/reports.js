@@ -420,6 +420,8 @@ exports.entityObservationReport = async function (req, res) {
 
             if (req.body.scores == false && req.body.criteriaWise == false) {
 
+                console.log("--- report 1----")
+
                 chartData = await helperFunc.entityReportChart(data, req.body.entityId, req.body.entityType);
                 chartData.entityName = data[0].event[req.body.entityType + "Name"];
 
@@ -440,6 +442,8 @@ exports.entityObservationReport = async function (req, res) {
 
 
             if (req.body.scores == true && req.body.criteriaWise == false && criteriaLevelReport == false) {
+
+                console.log("--- report 2----")
 
                 chartData = await helperFunc.entityScoreReportChartObjectCreation(data);
                 chartData.entityName = data[0].event[req.body.entityType + "Name"];
@@ -465,6 +469,7 @@ exports.entityObservationReport = async function (req, res) {
 
             if (req.body.scores == false && req.body.criteriaWise == true) {
 
+                console.log("--- report 3----")
                 let reportType = "criteria";
                 chartData = await helperFunc.entityReportChart(data, req.body.entityId, req.body.entityType, reportType);
                 chartData.entityName = data[0].event[req.body.entityType + "Name"];
@@ -487,6 +492,7 @@ exports.entityObservationReport = async function (req, res) {
 
             if (req.body.scores == true && req.body.criteriaWise == true && criteriaLevelReport == false) {
 
+                console.log("--- report 4----")
                 let reportType = "criteria";
                 chartData = await helperFunc.entityScoreReportChartObjectCreation(data, reportType);
                 chartData.entityName = data[0].event[req.body.entityType + "Name"];
@@ -514,6 +520,7 @@ exports.entityObservationReport = async function (req, res) {
 
             if (req.body.scores == true && criteriaLevelReport == true) {
 
+                console.log("--- report 5----")
                 let response = {
                     "result": true,
                     "programName": data[0].event.programName,
