@@ -216,7 +216,8 @@ exports.instaceObservationReport = async function (req, res) {
                     "programName": data[0].event.programName,
                     "solutionName": data[0].event.solutionName,
                     "solutionId": data[0].event.solutionId,
-                    "completedDate": data[0].event.completedDate
+                    "completedDate": data[0].event.completedDate,
+                    "entityName": data[0].event[req.body.entityType + "Name"]
                 };
 
                 chartData = await helperFunc.entityLevelReportData(data);
