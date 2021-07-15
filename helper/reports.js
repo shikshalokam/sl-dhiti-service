@@ -116,13 +116,10 @@ exports.instaceObservationReport = async function (req, res) {
             let chartData;
 
             let evidenceData = await getEvidenceData({ submissionId: req.body.submissionId });
-            console.log("---- start -------");
-            console.log("Entity name",data[0].event[req.body.entityType + "Name"]);
 
             //Send report based on input
             if (req.body.scores == false && req.body.criteriaWise == false) {
 
-                console.log("---- End Report 1 -------");
                 chartData = await helperFunc.instanceReportChart(data);
                 chartData.entityName = data[0].event[req.body.entityType + "Name"];
 
@@ -142,7 +139,6 @@ exports.instaceObservationReport = async function (req, res) {
 
             if (req.body.scores == true && req.body.criteriaWise == false && criteriaLevelReport == false) {
 
-                console.log("---- End Report 2 -------");
                 chartData = await helperFunc.instanceScoreReportChartObjectCreation(data);
                 chartData.entityName = data[0].event[req.body.entityType + "Name"];
 
@@ -167,7 +163,6 @@ exports.instaceObservationReport = async function (req, res) {
 
             if (req.body.scores == false && req.body.criteriaWise == true) {
 
-                console.log("---- End Report 3 -------");
                 let reportType = "criteria";
                 chartData = await helperFunc.instanceReportChart(data, reportType);
                 chartData.entityName = data[0].event[req.body.entityType + "Name"];
@@ -190,7 +185,6 @@ exports.instaceObservationReport = async function (req, res) {
 
             if (req.body.scores == true && req.body.criteriaWise == true && criteriaLevelReport == false) {
 
-                console.log("---- End Report 4 -------");
                 let reportType = "criteria";
                 chartData = await helperFunc.instanceScoreReportChartObjectCreation(data, reportType);
                 chartData.entityName = data[0].event[req.body.entityType + "Name"];
@@ -217,9 +211,6 @@ exports.instaceObservationReport = async function (req, res) {
             }
 
             if (req.body.scores == true && criteriaLevelReport == true) {
-                
-                console.log("---- End Report 5 -------");
-                console.log("entity name is ",data[0].event[req.body.entityType + "Name"]);
 
                 let response = {
                     "result": true,
@@ -414,13 +405,7 @@ exports.entityObservationReport = async function (req, res) {
                     entityType: req.body.entityType
                 });
 
-            console.log("---- start -------");
-            console.log("Entity name",data[0].event[req.body.entityType + "Name"]);
-            console.log("---- end ------")
-
             if (req.body.scores == false && req.body.criteriaWise == false) {
-
-                console.log("--- report 1----")
 
                 chartData = await helperFunc.entityReportChart(data, req.body.entityId, req.body.entityType);
                 chartData.entityName = data[0].event[req.body.entityType + "Name"];
@@ -442,8 +427,6 @@ exports.entityObservationReport = async function (req, res) {
 
 
             if (req.body.scores == true && req.body.criteriaWise == false && criteriaLevelReport == false) {
-
-                console.log("--- report 2----")
 
                 chartData = await helperFunc.entityScoreReportChartObjectCreation(data);
                 chartData.entityName = data[0].event[req.body.entityType + "Name"];
@@ -469,7 +452,6 @@ exports.entityObservationReport = async function (req, res) {
 
             if (req.body.scores == false && req.body.criteriaWise == true) {
 
-                console.log("--- report 3----")
                 let reportType = "criteria";
                 chartData = await helperFunc.entityReportChart(data, req.body.entityId, req.body.entityType, reportType);
                 chartData.entityName = data[0].event[req.body.entityType + "Name"];
@@ -492,7 +474,6 @@ exports.entityObservationReport = async function (req, res) {
 
             if (req.body.scores == true && req.body.criteriaWise == true && criteriaLevelReport == false) {
 
-                console.log("--- report 4----")
                 let reportType = "criteria";
                 chartData = await helperFunc.entityScoreReportChartObjectCreation(data, reportType);
                 chartData.entityName = data[0].event[req.body.entityType + "Name"];
@@ -520,7 +501,6 @@ exports.entityObservationReport = async function (req, res) {
 
             if (req.body.scores == true && criteriaLevelReport == true) {
 
-                console.log("--- report 5----")
                 let response = {
                     "result": true,
                     "programName": data[0].event.programName,
