@@ -38,6 +38,10 @@ exports.instanceReportChart = async function (data, reportType = "") {
             }
         }
 
+        if (data[0].event.completedDate) {
+            response["completedDate"] = data[0].event.completedDate;
+        }
+
 
         await Promise.all(data.map(async element => {
 
@@ -252,7 +256,18 @@ exports.entityReportChart = async function (data, entityId, entityType, reportTy
             }
         }
 
+        if (data[0].event.completedDate) {
+            response["completedDate"] = data[0].event.completedDate;
+        }
+
         await Promise.all(data.map(element => {
+
+            if (response.completedDate) {
+                if (new Date(element.event.completedDate) > new Date(response.completedDate)) {
+                    response.completedDate = element.event.completedDate;
+                }
+            }
+            
             if (!noOfSubmissions.includes(element.event[solutionType + "SubmissionId"])) {
                 noOfSubmissions.push(element.event[solutionType + "SubmissionId"]);
                 submissions.push({
@@ -363,15 +378,20 @@ exports.entityReportChart = async function (data, entityId, entityType, reportTy
         //sort the response objects based on questionExternalId field
         await response.reportSections.sort(getSortOrder("order")); //Pass the attribute to be sorted on
 
-        response.filters = [{
-            order: "",
-            filter: {
-                type: "dropdown",
-                title: "",
-                keyToSend: "submissionId",
-                data: submissions 
-            }
-        },{
+        response.filters = [];
+        if (submissions.length > 1) {
+            response.filters.push({
+                order: "",
+                filter: {
+                    type: "dropdown",
+                    title: "",
+                    keyToSend: "submissionId",
+                    data: submissions 
+                }
+            });
+        }
+
+        response.filters.push({
             order: "",
             filter: {
                 type: "segment",
@@ -379,7 +399,7 @@ exports.entityReportChart = async function (data, entityId, entityType, reportTy
                 keyToSend: "criteriaWise",
                 data: ["questionWise","criteriaWise"] 
             }
-        }]
+        });
 
         if (!reportType || reportType == filesHelper.survey) {
             // Get the questions array
@@ -777,6 +797,10 @@ exports.instanceScoreReportChartObjectCreation = async function (data, reportTyp
         reportSections: []
     }
 
+    if (data[0].event.completedDate) {
+        response["completedDate"] = data[0].event.completedDate;
+    }
+
     //Group the objects based on the questionExternalId
     let result = await groupArrayByGivenField(data, "questionExternalId");
 
@@ -910,8 +934,16 @@ exports.entityScoreReportChartObjectCreation = async function (data, reportType)
         reportSections: []
     }
 
+    if (data[0].event.completedDate) {
+        response["completedDate"] = data[0].event.completedDate;
+    }
+
     //loop sortedData and take required json objects
     await Promise.all(sortedData.map(async objectData => {
+
+        if (new Date(objectData.event.completedDate) > new Date(response.completedDate)) {
+            response.completedDate = objectData.event.completedDate;
+        }
 
         if (submissionId.includes(objectData.event.observationSubmissionId)) {
 
@@ -935,15 +967,20 @@ exports.entityScoreReportChartObjectCreation = async function (data, reportType)
     //sort the response objects using questionExternalId field
     await response.reportSections.sort(getSortOrder("order")); //Pass the attribute to be sorted on
 
-    response.filters = [{
-        order: "",
-        filter: {
-            type: "dropdown",
-            title: "",
-            keyToSend: "submissionId",
-            data: submissions 
-        },
-    },{
+    response.filters = [];
+    if ( submissions.length > 1 ) {
+        response.filters.push({
+            order: "",
+            filter: {
+                type: "dropdown",
+                title: "",
+                keyToSend: "submissionId",
+                data: submissions 
+            },
+        });
+    }
+
+    response.filters.push({
         order: "",
         filter: {
             type: "segment",
@@ -951,7 +988,7 @@ exports.entityScoreReportChartObjectCreation = async function (data, reportType)
             keyToSend: "criteriaWise",
             data: ["questionWise","criteriaWise"] 
         }
-    }]
+    });
 
     if (!reportType) {
         // Get the question array
@@ -1499,7 +1536,7 @@ exports.entityLevelReportData = async function (data) {
         return resolve({
             result : result,
             submissionId: latestSubmissionId,
-            filters :  [{
+            filters :  submissions.length > 1 ? [{
                 order: "",
                 filter: {
                     type: "dropdown",
@@ -1507,7 +1544,7 @@ exports.entityLevelReportData = async function (data) {
                     keyToSend: "submissionId",
                     data: submissions 
                 },
-            }]
+            }] : []
             
 
         });

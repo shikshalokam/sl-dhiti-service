@@ -55,28 +55,32 @@ exports.instaceObservationReport = async function (req, res) {
             bodyParam.dimensions.push("districtName");
         }
 
-        //Push dimensions to the query based on report type
+        // Push dimensions to the query based on report type
         if (req.body.scores == false && req.body.criteriaWise == false) {
-            bodyParam.dimensions.push("questionName", "questionAnswer", "school", "remarks", "entityType", "observationName", "observationId", "questionResponseType", "questionResponseLabel", "questionId", "questionExternalId", "instanceId", "instanceParentQuestion", "instanceParentResponsetype", "instanceParentId", "questionSequenceByEcm", "instanceParentExternalId", "instanceParentEcmSequence");
+            bodyParam.dimensions.push("questionName", "questionAnswer", "school", "remarks", "entityType", "observationName", "observationId", "questionResponseType", "questionResponseLabel", "questionId", "questionExternalId", "instanceId", "instanceParentQuestion", "instanceParentResponsetype", "instanceParentId", "questionSequenceByEcm", "instanceParentExternalId", "instanceParentEcmSequence","completedDate");
         }
 
         if (req.body.scores == true && req.body.criteriaWise == false && criteriaLevelReport == false) {
-            bodyParam.dimensions.push("questionName", "questionAnswer", "questionExternalId", "questionResponseType", "minScore", "maxScore", "totalScore", "scoreAchieved", "observationName");
+            bodyParam.dimensions.push("questionName", "questionAnswer", "questionExternalId", "questionResponseType", "minScore", "maxScore", "totalScore", "scoreAchieved", "observationName","completedDate");
             bodyParam.filter.fields.push({"type":"or","fields":[{"type":"selector","dimension":"questionResponseType","value":"radio"},{"type":"selector","dimension":"questionResponseType","value":"multiselect"},{"type":"selector","dimension":"questionResponseType","value":"slider"}]})
         }
 
         if (req.body.scores == false && req.body.criteriaWise == true) {
-            bodyParam.dimensions.push("questionName", "questionAnswer", "school", "remarks", "entityType", "observationName", "observationId", "questionResponseType", "questionResponseLabel", "questionId", "questionExternalId", "instanceId", "instanceParentQuestion", "instanceParentResponsetype", "instanceParentId", "questionSequenceByEcm", "instanceParentExternalId", "instanceParentEcmSequence", "criteriaName", "criteriaId", "instanceParentCriteriaName", "instanceParentCriteriaId");
+            bodyParam.dimensions.push("questionName", "questionAnswer", "school", "remarks", "entityType", "observationName", "observationId", "questionResponseType", "questionResponseLabel", "questionId", "questionExternalId", "instanceId", "instanceParentQuestion", "instanceParentResponsetype", "instanceParentId", "questionSequenceByEcm", "instanceParentExternalId", "instanceParentEcmSequence", "criteriaName", "criteriaId", "instanceParentCriteriaName", "instanceParentCriteriaId","completedDate");
         }
 
         if (req.body.scores == true && req.body.criteriaWise == true && criteriaLevelReport == false) {
-            bodyParam.dimensions.push("questionName", "questionAnswer", "questionExternalId", "questionResponseType", "minScore", "maxScore", "totalScore", "scoreAchieved", "observationName", "criteriaName", "criteriaId");
+            bodyParam.dimensions.push("questionName", "questionAnswer", "questionExternalId", "questionResponseType", "minScore", "maxScore", "totalScore", "scoreAchieved", "observationName", "criteriaName", "criteriaId","completedDate");
             bodyParam.filter.fields.push({"type":"or","fields":[{"type":"selector","dimension":"questionResponseType","value":"radio"},{"type":"selector","dimension":"questionResponseType","value":"multiselect"},{"type":"selector","dimension":"questionResponseType","value":"slider"}]})
         }
 
         if (req.body.scores == true && criteriaLevelReport == true) {
             bodyParam.filter.fields.push({"type":"selector","dimension":"childType","value":"criteria"})
             bodyParam.dimensions.push("observationSubmissionId", "completedDate", "domainName", "criteriaDescription", "level", "label", "childExternalid", "childName", "childType", "solutionId");
+        }
+
+        if (!bodyParam.dimensions.includes('completedDate')) {
+            bodyParam.dimensions.push('completedDate');
         }
 
         //pass the query get the result from druid
@@ -207,14 +211,25 @@ exports.instaceObservationReport = async function (req, res) {
             }
 
             if (req.body.scores == true && criteriaLevelReport == true) {
+
                 let response = {
                     "result": true,
                     "programName": data[0].event.programName,
                     "solutionName": data[0].event.solutionName,
-                    "solutionId": data[0].event.solutionId
+                    "solutionId": data[0].event.solutionId,
+                    "completedDate": data[0].event.completedDate,
+                    "entityName": data[0].event[req.body.entityType + "Name"]
                 };
 
                 chartData = await helperFunc.entityLevelReportData(data);
+
+                for (const element of data) {
+                    if (response.completedDate) {
+                        if (new Date(element.event.completedDate) > new Date(response.completedDate)) {
+                            response.completedDate = element.event.completedDate;
+                        }
+                    }
+                }
 
                 response.reportSections = chartData.result;
 
@@ -343,6 +358,10 @@ exports.entityObservationReport = async function (req, res) {
             bodyParam.dimensions.push("observationSubmissionId", "completedDate", "domainName", "criteriaDescription", "level", "label", "childExternalid", "childName", "childType", "solutionId");
         }
 
+        if (!bodyParam.dimensions.includes('completedDate')) {
+            bodyParam.dimensions.push('completedDate');
+        }
+
         //pass the query get the result from druid
         let options = gen.utils.getDruidConnection();
         options.method = "POST";
@@ -389,6 +408,7 @@ exports.entityObservationReport = async function (req, res) {
             if (req.body.scores == false && req.body.criteriaWise == false) {
 
                 chartData = await helperFunc.entityReportChart(data, req.body.entityId, req.body.entityType);
+                chartData.entityName = data[0].event[req.body.entityType + "Name"];
 
                 if (evidenceData.result) {
                     response = await helperFunc.evidenceChartObjectCreation(chartData, evidenceData.data, req.headers["x-auth-token"]);
@@ -434,6 +454,7 @@ exports.entityObservationReport = async function (req, res) {
 
                 let reportType = "criteria";
                 chartData = await helperFunc.entityReportChart(data, req.body.entityId, req.body.entityType, reportType);
+                chartData.entityName = data[0].event[req.body.entityType + "Name"];
 
                 if (evidenceData.result) {
                     response = await helperFunc.evidenceChartObjectCreation(chartData, evidenceData.data, req.headers["x-auth-token"]);
@@ -484,10 +505,21 @@ exports.entityObservationReport = async function (req, res) {
                     "result": true,
                     "programName": data[0].event.programName,
                     "solutionName": data[0].event.solutionName,
-                    "solutionId": data[0].event.solutionId
+                    "solutionId": data[0].event.solutionId,
+                    "completedDate": data[0].event.completedDate,
+                    "entityName": data[0].event[req.body.entityType + "Name"]
                 };
 
                 chartData = await helperFunc.entityLevelReportData(data);
+                chartData.entityName = data[0].event[req.body.entityType + "Name"];
+
+                for (const element of data) {
+                    if (response.completedDate) {
+                        if (new Date(element.event.completedDate) > new Date(response.completedDate)) {
+                            response.completedDate = element.event.completedDate;
+                        }
+                    }
+                }
 
                 response.reportSections = chartData.result; 
                 response.filters = chartData.filters;
