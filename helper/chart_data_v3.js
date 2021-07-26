@@ -378,15 +378,20 @@ exports.entityReportChart = async function (data, entityId, entityType, reportTy
         //sort the response objects based on questionExternalId field
         await response.reportSections.sort(getSortOrder("order")); //Pass the attribute to be sorted on
 
-        response.filters = [{
-            order: "",
-            filter: {
-                type: "dropdown",
-                title: "",
-                keyToSend: "submissionId",
-                data: submissions 
-            }
-        },{
+        response.filters = [];
+        if (submissions.length > 1) {
+            response.filters.push({
+                order: "",
+                filter: {
+                    type: "dropdown",
+                    title: "",
+                    keyToSend: "submissionId",
+                    data: submissions 
+                }
+            });
+        }
+
+        response.filters.push({
             order: "",
             filter: {
                 type: "segment",
@@ -394,7 +399,7 @@ exports.entityReportChart = async function (data, entityId, entityType, reportTy
                 keyToSend: "criteriaWise",
                 data: ["questionWise","criteriaWise"] 
             }
-        }]
+        });
 
         if (!reportType || reportType == filesHelper.survey) {
             // Get the questions array
@@ -962,15 +967,20 @@ exports.entityScoreReportChartObjectCreation = async function (data, reportType)
     //sort the response objects using questionExternalId field
     await response.reportSections.sort(getSortOrder("order")); //Pass the attribute to be sorted on
 
-    response.filters = [{
-        order: "",
-        filter: {
-            type: "dropdown",
-            title: "",
-            keyToSend: "submissionId",
-            data: submissions 
-        },
-    },{
+    response.filters = [];
+    if ( submissions.length > 1 ) {
+        response.filters.push({
+            order: "",
+            filter: {
+                type: "dropdown",
+                title: "",
+                keyToSend: "submissionId",
+                data: submissions 
+            },
+        });
+    }
+
+    response.filters.push({
         order: "",
         filter: {
             type: "segment",
@@ -978,7 +988,7 @@ exports.entityScoreReportChartObjectCreation = async function (data, reportType)
             keyToSend: "criteriaWise",
             data: ["questionWise","criteriaWise"] 
         }
-    }]
+    });
 
     if (!reportType) {
         // Get the question array
@@ -1526,7 +1536,7 @@ exports.entityLevelReportData = async function (data) {
         return resolve({
             result : result,
             submissionId: latestSubmissionId,
-            filters :  [{
+            filters :  submissions.length > 1 ? [{
                 order: "",
                 filter: {
                     type: "dropdown",
@@ -1534,7 +1544,7 @@ exports.entityLevelReportData = async function (data) {
                     keyToSend: "submissionId",
                     data: submissions 
                 },
-            }]
+            }] : []
             
 
         });
